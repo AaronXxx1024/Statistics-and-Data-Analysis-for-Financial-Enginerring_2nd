@@ -87,24 +87,23 @@ What is the probability that the value of the stock will be
 below $950,000 at the close of at least one of the next 45 
 trading days? 
 ---------
-0.99993
+0.9998
 
 """
 
-random.seed(2021)
+np.random.seed(2021)
 
 log_price = np.log(1e6)
 below = [0] * int(1e5)
-record = [log_price]
 current_min = np.log(1e6)
 
 for i in range(100000):
     # Create an normally distributed random variable ~ N(0.05, 0.23**2)
     r = 0.05/253 + 0.23/math.sqrt(253) * np.random.randn(45)
     log_price += sum(r)
-    record.append(log_price)
-    min_logP = min(record)
-    if min_logP < np.log(950000):
+    if log_price < current_min:
+        current_min = log_price
+    if current_min < np.log(950000):
         below[i] = 1
 
 print(np.mean(below))
