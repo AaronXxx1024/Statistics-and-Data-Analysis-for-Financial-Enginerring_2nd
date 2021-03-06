@@ -208,4 +208,47 @@ plt.show()
 print(np.mean(logr))
 print(np.std(logr))
 
+#%%
+"""
+Problem 12
+---------- 
+Compute the returns and log returns and plot them against each other. 
+As discussed in Sect. 2.1.3, does it seem reasonable that the two types of daily returns are approximately equal? 
+Yes.
+
+Problem 13 
+----------
+Compute the mean and standard deviation for both the returns and the log returns. 
+Comment on the similarities and differences you perceive in the first two moments of each random variable. 
+Does it seem reasonable that they are the same? 
+Pretty similar but not exactly same.
+
+Problem 14
+----------
+Perform a t-test to compare the means of the returns and the log returns. 
+Comment on your findings. Do you reject the null hypothesis that they are the same mean at 5 % significance? 
+Or do you accept it? [Hint: Should you be using an independent samples t-test or a paired-samples t-test?] 
+What are the assumptions behind the t-test? Do you think that they are met in this example? 
+If the assumptions made by the t-test are not met, how would this affect your interpretation of the results of the test? 
+
+Problem 15
+----------
+After looking at return and log return data for McDonald’s, are you satisfied that for small values, 
+log returns and returns are interchangeable?
+
+"""
+# read data
+mcd = pd.read_csv('./datasets/MCD_PriceDaily.csv')
+# create return series
+mcd['return'] = mcd['Adj Close'].pct_change()
+mcd['log_return'] = np.log(mcd['Adj Close'] / mcd['Adj Close'].shift())
+# plot return
+plt.scatter(x=mcd['return'], y=mcd['log_return'])
+plt.show()
+# mean and std for each return series
+print("Mean of return: ", mcd['return'].mean())
+print("Mean of log return: ", mcd['log_return'].mean())
+print("Std of return: ", mcd['return'].std())
+print("Std of log return: ", mcd['log_return'].std())
+
 
