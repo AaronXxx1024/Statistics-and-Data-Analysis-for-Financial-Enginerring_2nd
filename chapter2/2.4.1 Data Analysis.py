@@ -1,13 +1,9 @@
 """
-Problem 1 - Problem 3
-The data set Stock_bond.csv contains daily volumes
-and adjusted closing (AC) prices of stocks and the
-S&P 500 (columns B–W) and yields on bonds (columns
-X–AD) from 2-Jan-1987 to 1-Sep-2006.
+Part 1: Problem 1 - Problem 17
+Part 2: Exercise 1 - Exercise 11
 """
 
 import math
-import random
 
 import numpy as np
 import pandas as pd
@@ -246,7 +242,6 @@ Problem 14
 2) The difference series calculated from return & log_return is independent and normally distributed
    with a constant variance.
 3) From solution manual:
-   
 
 Problem 15
 ----------
@@ -255,20 +250,122 @@ log returns and returns are interchangeable?
 ---------- 
 Yes.
 
+Problem 16
+----------
+Assume that McDonald’s log returns are normally distributed with mean and standard deviation 
+equal to their estimates and that you have been made the following proposition by a friend: 
+If at any point within the next 20 trading days, the price of McDonald’s falls below 85 dollars, 
+you will be paid $100, but if it does not, you have to pay him $1. The current price of McDonald’s 
+is at the end of the sample data, $93.07. 
+Are you willing to make the bet? 
+(Use 10,000 iterations in your simulation and use the command set.seed(2015) to ensure your results 
+are the same as the answer key)
+----------
+I got an negative expected payoff, which is different with the solution....
+
 """
 # read data
 mcd = pd.read_csv('./datasets/MCD_PriceDaily.csv')
+
 # create return series
 mcd['return'] = mcd['Adj Close'].pct_change()
 mcd['log_return'] = np.log(mcd['Adj Close'] / mcd['Adj Close'].shift())
+
 # plot return
 plt.scatter(x=mcd['return'], y=mcd['log_return'])
 plt.show()
+
 # mean and std for each return series
 print("Mean of return: ", mcd['return'].mean())
 print("Mean of log return: ", mcd['log_return'].mean())
 print("Std of return: ", mcd['return'].std())
 print("Std of log return: ", mcd['log_return'].std())
-# paired t-test
-stats.ttest_rel(a=mcd['return'][1:], b=mcd['log_return'][1:])
 
+# paired t-test
+print(stats.ttest_rel(a=mcd['return'][1:], b=mcd['log_return'][1:]))
+# plot distribution of log return
+mcd['log_return'].hist(bins=60)
+plt.show()
+
+# P16 & 17
+np.random.seed(2015)
+
+log_mean = mcd['log_return'].mean()
+log_std = mcd['log_return'].std()
+win = [-1] * 10000
+p0 = list(mcd['Adj Close'])[-1]
+log_p0 = np.log(p0)
+
+for i in range(10000):
+    logr = log_mean + log_std * np.random.randn(20)
+    r0 = 0
+    for r in logr:
+        r0 += r
+        if p0 * np.exp(r0) < 84.5:
+            win[i] = 25
+            break
+
+print("Expected payoff: ", np.mean(win))
+
+#%%
+"""
+Exercises 1 - 7
+1. Suppose that the daily log returns on a stock are independent and normally distributed 
+with mean 0.001 and standard deviation 0.015. Suppose you buy $1,000 worth of this stock.
+(a) What is the probability that after one trading day your investment is worth less than $990? 
+    (Note: The R function pnorm() will compute a normal CDF, so, for example, pnorm(0.3, mean = 0.1, 
+    sd = 0.2) is the normal CDF with mean 0.1 and standard deviation 0.2 evaluated at 0.3.) 
+    0.23065573155475771
+(b) What is the probability that after five trading days your investment is worth less than $990
+    0.3268188763247845
+    
+2. The yearly log returns on a stock are normally distributed with mean 0.1 and standard deviation 0.2. 
+The stock is selling at $100 today. What is the probability that 1 year from now it is selling at $110 
+or more?
+0.5093539805793366
+
+3. The yearly log returns on a stock are normally distributed with mean 0.08 and standard deviation 0.15. 
+The stock is selling at $80 today. What is the probability that 2 years from now it is selling at $90 or more?
+0.5788735865041656
+
+4. Suppose the prices of a stock at times 1, 2, and 3 are P1= 95, P2= 103, and P3= 98. Find r3(2).
+0.03157894736842115
+
+5. The prices and dividends of a stock are given in the table below.
+(a) What is R2? 
+0.04230769230769238
+(b) What is R4(3)? 
+0.147958796968231
+(c) What is r3?
+-0.014925650216675593
+
+7.a
+N(0.24, 1.88)
+7.b
+0.900361112462998
+7.c
+0.47
+7.d
+N(0.72, 0.94)
+"""
+
+# E1
+# Find the P(log(r1)<=log(990/1000))
+# 1.a
+stats.norm.cdf(np.log(990/1000), loc=0.001, scale=0.015)
+# 1.b
+stats.norm.cdf(np.log(990/1000), loc=0.005, scale=0.015*np.sqrt(5))
+# 2
+1 - stats.norm.cdf(np.log(110/100), loc=0.1, scale=0.2)
+# 3
+1 - stats.norm.cdf(np.log(90/80), loc=0.16, scale=0.15*np.sqrt(2))
+# 4
+print(98/95-1)
+# 5.a
+print((54+0.2)/52-1)
+# 5.b
+print((59+0.25)/53 * (53+0.2)/54 * (54+0.2)/52 - 1)
+# 5.c
+print(np.log((53+0.2)/54))
+# 7.b
+stats.norm.cdf(2, loc=0.24, scale=np.sqrt(1.88))
