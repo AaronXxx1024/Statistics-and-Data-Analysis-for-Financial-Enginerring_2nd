@@ -232,21 +232,28 @@ Pretty similar but not exactly same.
 
 Problem 14
 ----------
-Perform a t-test to compare the means of the returns and the log returns. 
-Comment on your findings. Do you reject the null hypothesis that they are the same mean at 5 % significance? 
-Or do you accept it? [Hint: Should you be using an independent samples t-test or a paired-samples t-test?] 
-What are the assumptions behind the t-test? Do you think that they are met in this example? 
-If the assumptions made by the t-test are not met, how would this affect your interpretation of the results of the test? 
+1) Perform a t-test to compare the means of the returns and the log returns. 
+   Comment on your findings. Do you reject the null hypothesis that they are 
+   the same mean at 5 % significance? Or do you accept it? 
+   [Hint: Should you be using an independent samples t-test or a paired-samples t-test?] 
+2) What are the assumptions behind the t-test? Do you think that they are met in this example? 
+3) If the assumptions made by the t-test are not met, how would this affect your interpretation 
+   of the results of the test? 
 ---------- 
-Paired t-test result:
-Ttest_relResult(statistic=15.865603933357201, pvalue=1.642607974463449e-51)
-
+1) Paired t-test result:
+   Ttest_relResult(statistic=15.865603933357201, pvalue=1.642607974463449e-51)
+   Since p-value is very small, we reject the null hypothesis of equal mean at 5% significance.
+2) The difference series calculated from return & log_return is independent and normally distributed
+   with a constant variance.
+3) From solution manual:
+   
 
 Problem 15
 ----------
 After looking at return and log return data for McDonald’s, are you satisfied that for small values, 
 log returns and returns are interchangeable?
 ---------- 
+Yes.
 
 """
 # read data
