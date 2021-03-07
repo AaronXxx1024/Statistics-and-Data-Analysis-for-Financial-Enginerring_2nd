@@ -12,6 +12,7 @@ import random
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from scipy import stats
 
 
 #%%
@@ -214,6 +215,7 @@ Problem 12
 ---------- 
 Compute the returns and log returns and plot them against each other. 
 As discussed in Sect. 2.1.3, does it seem reasonable that the two types of daily returns are approximately equal? 
+---------- 
 Yes.
 
 Problem 13 
@@ -221,6 +223,11 @@ Problem 13
 Compute the mean and standard deviation for both the returns and the log returns. 
 Comment on the similarities and differences you perceive in the first two moments of each random variable. 
 Does it seem reasonable that they are the same? 
+---------- 
+Mean of return:  0.0005027479017916817
+Mean of log return:  0.00046305531799950865
+Std of return:  0.00890031928901851
+Std of log return:  0.008901467457248666
 Pretty similar but not exactly same.
 
 Problem 14
@@ -230,11 +237,16 @@ Comment on your findings. Do you reject the null hypothesis that they are the sa
 Or do you accept it? [Hint: Should you be using an independent samples t-test or a paired-samples t-test?] 
 What are the assumptions behind the t-test? Do you think that they are met in this example? 
 If the assumptions made by the t-test are not met, how would this affect your interpretation of the results of the test? 
+---------- 
+Paired t-test result:
+Ttest_relResult(statistic=15.865603933357201, pvalue=1.642607974463449e-51)
+
 
 Problem 15
 ----------
 After looking at return and log return data for McDonald’s, are you satisfied that for small values, 
 log returns and returns are interchangeable?
+---------- 
 
 """
 # read data
@@ -250,5 +262,6 @@ print("Mean of return: ", mcd['return'].mean())
 print("Mean of log return: ", mcd['log_return'].mean())
 print("Std of return: ", mcd['return'].std())
 print("Std of log return: ", mcd['log_return'].std())
-
+# paired t-test
+stats.ttest_rel(a=mcd['return'][1:], b=mcd['log_return'][1:])
 
